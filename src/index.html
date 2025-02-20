@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hello World!</title>
+    <style>
+      ul {
+        list-style-type: none;
+        padding: 0;
+      }
+      li {
+        margin: 5px 0;
+      }
+      label {
+        margin-right: 1em;
+      }
+    </style>
+    <link rel="stylesheet" href="index.css" />
+  </head>
+  <body>
+    <h3>Code Generator</h3>
+    <section>
+      <div>
+        <label for="type">Test</label>
+        <input type="checkbox" value="true" />
+      </div>
+      <label for="type">Ruta Projecto raiz</label>
+      <input id="rootPath" style="width: 100%" />
+    </section>
+    <form id="formularioArchivos">
+      <div>
+        <label for="type">Nombre Clase</label>
+        <input id="NombreClase" placeholder="Usuario..." />
+      </div>
+      <section id="filas" style="margin-top: 1em">
+        <article class="fila" style="display: flex; margin-top: 1em">
+          <label for="type">Tipo</label>
+          <input list="typeList" class="tipo" placeholder="String.." />
+          <datalist id="typeList">
+            <option value="BigDecimal"></option>
+            <option value="String"></option>
+            <option value="Long"></option>
+            <option value="Boolean"></option>
+            <option value="boolean"></option>
+            <option value="int"></option>
+            <option value="Integer"></option>
+            <option value="Date"></option>
+            <option value="long"></option>
+            <option value="float"></option>
+            <option value="Float"></option>
+            <option value="double"></option>
+            <option value="Double"></option>
+            <option value="char"></option>
+            <option value="Character"></option>
+            <option value="byte"></option>
+            <option value="Byte"></option>
+            <option value="short"></option>
+            <option value="Short"></option>
+            <option value="Object"></option>
+            <option value="LocalDate"></option>
+            <option value="LocalTime"></option>
+            <option value="LocalDateTime"></option>
+          </datalist>
+          <label style="margin-left: 2em">Nombre campo</label>
+          <input type="text" class="nombreCampo" placeholder="nombreApellido.." />
+          <span class="relacionContainer" style="display: none">
+            <label style="margin-left: 2em">Relacion</label>
+            <input list="relacionList" class="relacion" placeholder="@OneToMany" />
+            <datalist id="relacionList">
+              <option value="@OneToMany"></option>
+              <option value="@OneToOne"></option>
+              <option value="@ManyToOne"></option>
+              <option value="@ManyToMany"></option>
+            </datalist>
+          </span>
+          <button style="margin-left: 1em; margin-right: 1em" class="botonNuevo" onclick="nuevaFila(this)">
+            + Nuevo Campo
+          </button>
+          <button
+            class="botonBorrar"
+            style="margin-left: 1em; margin-right: 1em"
+            onclick="borrarFila(this)"
+            style="display: none"
+          >
+            - Borrar Campo
+          </button>
+        </article>
+      </section>
+      <div>
+        <button style="margin-top: 1em" type="submit">Crear Archivos</button>
+      </div>
+    </form>
+    <script>
+      const tiposUsados = [
+        "BigDecimal",
+        "String",
+        "Long",
+        "Boolean",
+        "boolean",
+        "int",
+        "Integer",
+        "Date",
+        "long",
+        "float",
+        "Float",
+        "double",
+        "Double",
+        "char",
+        "Character",
+        "byte",
+        "Byte",
+        "short",
+        "Short",
+        "Object",
+        "LocalDate",
+        "LocalTime",
+        "LocalDateTime",
+      ];
+      function nuevaFila(button) {
+        const parent = button.parentElement;
+        let tipo = parent.getElementsByClassName("tipo")[0].value;
+        let nombreCampo = parent.getElementsByClassName("nombreCampo")[0].value;
+        let relacion = parent.getElementsByClassName("relacion")[0].value;
+        if (!tipo || !nombreCampo) {
+          alert("Fila vacia");
+          return;
+        }
+        //////
+        let newFila = document.getElementsByClassName("fila")[0].cloneNode(true);
+        document.getElementById("filas").appendChild(newFila);
+        mostrarBotones();
+      }
+
+      function mostrarBotones() {
+        let size = document.getElementsByClassName("fila").length;
+        for (let i = 0; i < size; i++) {
+          document.getElementsByClassName("fila")[0];
+          document.getElementsByClassName("botonBorrar")[i].style.display = "inline";
+          document.getElementsByClassName("botonNuevo")[i].style.display = "none";
+          document.getElementsByClassName("botonNuevo")[i].style.display = "none";
+          let tipo = document.getElementsByClassName("tipo")[i].value;
+          console.log(tipo);
+          if (tipo && !tiposUsados.includes(tipo))
+            document.getElementsByClassName("relacionContainer")[i].style.display = "inline";
+          else document.getElementsByClassName("relacionContainer")[i].style.display = "none";
+        }
+        document.getElementsByClassName("botonBorrar")[0].style.display = "none";
+        document.getElementsByClassName("botonNuevo")[size - 1].style.display = "inline";
+      }
+
+      function borrarFila(button) {
+        let respuesta = confirm("Esta seguro de eliminarlo ?");
+        if (respuesta) button.parentElement.remove();
+        mostrarBotones();
+      }
+      function crearArchivos(e) {
+        e.preventDefault();
+        console.log(e);
+      }
+      const formulario = document.getElementById("formularioArchivos");
+      formulario.addEventListener("submit", function (event) {
+        event.preventDefault();
+        const nombre = document.getElementById("nombre").value;
+        const email = document.getElementById("email").value;
+        console.log("Nombre:", nombre);
+        console.log("Email:", email);
+      });
+      window.electronAPI.receiveRootPath((event, rootPath) => {
+        console.log("Root Path recibido:", rootPath);
+        document.getElementById("rootPath").value = rootPath;
+      });
+    </script>
+  </body>
+</html>
