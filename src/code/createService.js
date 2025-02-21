@@ -1,35 +1,8 @@
 const fs = require("fs");
-const {
-  campo,
-  campoTabla,
-  NombreClase,
-  nombreClase,
-  atributos,
-  createDto,
-  dtoPath,
-  esClase,
-  fromDto,
-  get,
-  getDto,
-  getters,
-  interfaceServicePath,
-  mbsoft,
-  modelPath,
-  nameFieldTabla,
-  primefacesPath,
-  rootPath,
-  serviceMapperPath,
-  servicePath,
-  set,
-  setDto,
-  setters,
-  test,
-  tiposNumericos,
-  tiposTiempo,
-  tiposUsados,
-} = require("utils");
+const { servicePath } = require("./utils");
 
-function createService(servicePath, NombreClase, nombreClase) {
+function createServiceFile(NombreClase, atributos) {
+  const nombreClase = NombreClase.charAt(0).toLowerCase() + NombreClase.slice(1);
   const serviceContent = `package ar.com.mbsoft.erp.service.impl;
 
 import ar.com.mbsoft.erp.dao.I${NombreClase}Dao;
@@ -101,3 +74,4 @@ public class ${NombreClase}Service extends AbstractService<${NombreClase}, ${Nom
     }
   });
 }
+module.exports = { createServiceFile };

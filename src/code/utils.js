@@ -1,15 +1,18 @@
+const { createBeanFile } = require("./createBean");
 const { createServiceMapperFile } = require("./createServiceMapper");
 const os = require("os");
 
 const username = os.userInfo().username;
 console.log("Usuario:", username);
 
-const NombreClase = "Medico";
-const nombreClase = NombreClase.charAt(0).toLowerCase() + NombreClase.slice(1);
+//const NombreClase = "Medico";
+//const nombreClase = NombreClase.charAt(0).toLowerCase() + NombreClase.slice(1);
+/*
 const atributos = [
   { type: "String", name: "nombre", nullable: true },
   { type: "Usuario", name: "usuario", relacion: "@OneToMany" },
 ];
+*/
 
 let test = true;
 const rootPath = `C:/Users/${username}/IdeaProjects/erp-web/`;
@@ -19,6 +22,7 @@ const servicePath = test ? "" : rootPath + "src/main/java/ar/com/mbsoft/erp/serv
 const serviceMapperPath = test ? "" : rootPath + "src/main/java/ar/com/mbsoft/erp/service/impl/mapper/";
 const modelPath = test ? "" : rootPath + "src/main/java/ar/com/mbsoft/erp/model/impl/";
 const interfaceServicePath = test ? "" : rootPath + "src/main/java/ar/com/mbsoft/erp/service/";
+const beanPath = test ? "" : rootPath + "src/main/java/ar/com/mbsoft/erp/bean/impl/";
 
 const mbsoft = `
 ______  _________________________________________
@@ -168,16 +172,18 @@ function campoTabla(atributo) {
   return (atributo.nullable ? "" : notNull) + anotation + campo(atributo) + "\n";
 }
 
+function crearArchivos(NombreClase, atributos, test) {
+  test = test;
+  createBeanFile();
+  createInterfaceService();
+}
+
 /////////////////////////////////////
 /////////////////////////////////////
 /////////////////////////////////////
 /////////////////////////////////////
 /*---------------------------------------------------*/
 module.exports = {
-  username,
-  NombreClase,
-  nombreClase,
-  atributos,
   test,
   rootPath,
   dtoPath,
@@ -202,4 +208,6 @@ module.exports = {
   setters,
   campo,
   campoTabla,
+  beanPath,
+  crearArchivos,
 };

@@ -1,34 +1,7 @@
 const fs = require("fs");
-const {
-  campo,
-  campoTabla,
-  NombreClase,
-  nombreClase,
-  atributos,
-  createDto,
-  dtoPath,
-  esClase,
-  fromDto,
-  get,
-  getDto,
-  getters,
-  interfaceServicePath,
-  mbsoft,
-  modelPath,
-  nameFieldTabla,
-  primefacesPath,
-  rootPath,
-  serviceMapperPath,
-  servicePath,
-  set,
-  setDto,
-  setters,
-  test,
-  tiposNumericos,
-  tiposTiempo,
-  tiposUsados,
-} = require("utils");
-function createModelFile() {
+const { campoTabla, getters, modelPath, setters } = require("./utils");
+function createModelFile(NombreClase, atributos) {
+  const nombreClase = NombreClase.charAt(0).toLowerCase() + NombreClase.slice(1);
   const modelContent = `package ar.com.mbsoft.erp.model.impl;
 
 import ar.com.mbsoft.erp.annotations.MBSecurity;
@@ -64,3 +37,5 @@ ${setters()}
     }
   });
 }
+
+module.exports = { createModelFile };

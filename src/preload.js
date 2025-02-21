@@ -5,4 +5,5 @@ const { contextBridge, ipcRenderer } = require("electron");
 // Exponer el canal para recibir el rootPath desde el main process
 contextBridge.exposeInMainWorld("electronAPI", {
   receiveRootPath: (callback) => ipcRenderer.on("set-root-path", callback),
+  crearArchivos: (NombreClase, atributos) => ipcRenderer.on("crearArchivos", NombreClase, atributos),
 });

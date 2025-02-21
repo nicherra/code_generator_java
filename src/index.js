@@ -1,6 +1,6 @@
 const { app, BrowserWindow } = require("electron");
 const path = require("node:path");
-const { rootPath } = require("./code/utils");
+const { rootPath, crearArchivos } = require("./code/utils");
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require("electron-squirrel-startup")) {
@@ -20,6 +20,7 @@ const createWindow = () => {
   });
   mainWindow.webContents.on("did-finish-load", () => {
     mainWindow.webContents.send("set-root-path", rootPath);
+    mainWindow.webContents.send("crearArchivos", crearArchivos);
   });
 
   // and load the index.html of the app.

@@ -1,34 +1,7 @@
 const fs = require("fs");
-const {
-  campo,
-  campoTabla,
-  NombreClase,
-  nombreClase,
-  atributos,
-  createDto,
-  dtoPath,
-  esClase,
-  fromDto,
-  get,
-  getDto,
-  getters,
-  interfaceServicePath,
-  mbsoft,
-  modelPath,
-  nameFieldTabla,
-  primefacesPath,
-  rootPath,
-  serviceMapperPath,
-  servicePath,
-  set,
-  setDto,
-  setters,
-  test,
-  tiposNumericos,
-  tiposTiempo,
-  tiposUsados,
-} = require("utils");
-function createBeanFile() {
+const { beanPath } = require("./utils");
+function createBeanFile(NombreClase) {
+  const nombreClase = NombreClase.charAt(0).toLowerCase() + NombreClase.slice(1);
   const beanContent = `package ar.com.mbsoft.erp.bean.impl;
 
 import ar.com.mbsoft.erp.dto.IDto;
@@ -99,7 +72,7 @@ public class ${NombreClase}Bean extends AbstractSingleMasterBean<${NombreClase}D
 
 `;
 
-  fs.writeFile(`${NombreClase}Bean.java`, beanContent, (err) => {
+  fs.writeFile(beanPath + `${NombreClase}Bean.java`, beanContent, (err) => {
     if (err) {
       console.error("Error al escribir el archivo:", err);
     } else {
@@ -107,3 +80,6 @@ public class ${NombreClase}Bean extends AbstractSingleMasterBean<${NombreClase}D
     }
   });
 }
+module.exports = {
+  createBeanFile,
+};

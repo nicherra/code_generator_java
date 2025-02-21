@@ -30,7 +30,7 @@
     <form id="formularioArchivos">
       <div>
         <label for="type">Nombre Clase</label>
-        <input id="NombreClase" placeholder="Usuario..." />
+        <input id="NombreClase" placeholder="NombreClase..." />
       </div>
       <section id="filas" style="margin-top: 1em">
         <article class="fila" style="display: flex; margin-top: 1em">
@@ -63,6 +63,8 @@
           </datalist>
           <label style="margin-left: 2em">Nombre campo</label>
           <input type="text" class="nombreCampo" placeholder="nombreApellido.." />
+          <label style="margin-left: 2em" for="nullable">Nullable</label>
+          <input class="nullable" type="checkbox" value="true" />
           <span class="relacionContainer" style="display: none">
             <label style="margin-left: 2em">Relacion</label>
             <input list="relacionList" class="relacion" placeholder="@OneToMany" />
@@ -73,7 +75,7 @@
               <option value="@ManyToMany"></option>
             </datalist>
           </span>
-          <button style="margin-left: 1em; margin-right: 1em" class="botonNuevo" onclick="nuevaFila(this)">
+          <button style="margin-left: 5em; margin-right: 1em" class="botonNuevo" onclick="nuevaFila(this)">
             + Nuevo Campo
           </button>
           <button
@@ -91,6 +93,11 @@
       </div>
     </form>
     <script>
+      var crearArchivos;
+      window.electronAPI.receiveRootPath((event, rootPath) => {
+        console.log("Root Path recibido:", rootPath);
+        document.getElementById("rootPath").value = rootPath;
+      });
       const tiposUsados = [
         "BigDecimal",
         "String",
@@ -116,6 +123,26 @@
         "LocalTime",
         "LocalDateTime",
       ];
+
+      const formulario = document.getElementById("formularioArchivos");
+
+      formulario.addEventListener("submit", function (event) {
+        event.preventDefault();
+        let NombreClase = document.getElementById("nombreClase").value;
+        let atributos = [];
+        let size = document.getElementsByClassName("fila").length;
+        for (let i = 0; i < size; i++) {
+          let type = document.getElementsByClassName("tipo")[i].value;
+          let nombreCampo = document.getElementsByClassName("nombreCampo")[i].value;
+          let relacion = document.getElementsByClassName("relacion")[i].value;
+          let nullable = document.getElementsByClassName("nullable")[i].value;
+          atributos[i] = { type: type, name: nombreCampo, relacion: relacion, nullable: nullable };
+        }
+        console.log(NombreClase);
+        console.log(atributos);
+        window.electronAPI.crearArchivos(NombreClase,atributos)
+      });
+
       function nuevaFila(button) {
         const parent = button.parentElement;
         let tipo = parent.getElementsByClassName("tipo")[0].value;
@@ -153,22 +180,13 @@
         if (respuesta) button.parentElement.remove();
         mostrarBotones();
       }
+
+      /*
       function crearArchivos(e) {
         e.preventDefault();
         console.log(e);
       }
-      const formulario = document.getElementById("formularioArchivos");
-      formulario.addEventListener("submit", function (event) {
-        event.preventDefault();
-        const nombre = document.getElementById("nombre").value;
-        const email = document.getElementById("email").value;
-        console.log("Nombre:", nombre);
-        console.log("Email:", email);
-      });
-      window.electronAPI.receiveRootPath((event, rootPath) => {
-        console.log("Root Path recibido:", rootPath);
-        document.getElementById("rootPath").value = rootPath;
-      });
+        */
     </script>
   </body>
 </html>

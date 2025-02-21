@@ -1,34 +1,8 @@
 const fs = require("fs");
-const {
-  campo,
-  campoTabla,
-  NombreClase,
-  nombreClase,
-  atributos,
-  createDto,
-  dtoPath,
-  esClase,
-  fromDto,
-  get,
-  getDto,
-  getters,
-  interfaceServicePath,
-  mbsoft,
-  modelPath,
-  nameFieldTabla,
-  primefacesPath,
-  rootPath,
-  serviceMapperPath,
-  servicePath,
-  set,
-  setDto,
-  setters,
-  test,
-  tiposNumericos,
-  tiposTiempo,
-  tiposUsados,
-} = require("utils");
-function createPrimefacesFiles() {
+const { primefacesPath, test } = require("./utils");
+
+function createPrimefacesFiles(NombreClase, atributos) {
+  const nombreClase = NombreClase.charAt(0).toLowerCase() + NombreClase.slice(1);
   const abmContent = `<?xml version="1.0" encoding="UTF-8"?>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
@@ -132,3 +106,4 @@ function createPrimefacesFiles() {
     }
   });
 }
+module.exports = { createPrimefacesFiles };

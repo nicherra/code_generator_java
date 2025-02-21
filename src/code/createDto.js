@@ -1,34 +1,7 @@
 const fs = require("fs");
-const {
-  campo,
-  campoTabla,
-  NombreClase,
-  nombreClase,
-  atributos,
-  createDto,
-  dtoPath,
-  esClase,
-  fromDto,
-  get,
-  getDto,
-  getters,
-  interfaceServicePath,
-  mbsoft,
-  modelPath,
-  nameFieldTabla,
-  primefacesPath,
-  rootPath,
-  serviceMapperPath,
-  servicePath,
-  set,
-  setDto,
-  setters,
-  test,
-  tiposNumericos,
-  tiposTiempo,
-  tiposUsados,
-} = require("utils");
-function createDtoFile(dtoPath, atributos, NombreClase, nombreClase) {
+const { dtoPath } = require("./utils");
+function createDtoFile(NombreClase, atributos) {
+  const nombreClase = NombreClase.charAt(0).toLowerCase() + NombreClase.slice(1);
   const dtoContent = `package ar.com.mbsoft.erp.dto.impl.generated;
 import ar.com.mbsoft.erp.dto.IDto;
 import java.math.BigDecimal;
@@ -99,3 +72,5 @@ ${atributos
     }
   });
 }
+
+module.exports = { createDtoFile };
