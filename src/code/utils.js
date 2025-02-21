@@ -173,9 +173,11 @@ function campoTabla(atributo) {
 }
 
 function crearArchivos(NombreClase, atributos, test) {
+  console.log("creandoArchivos.....");
   test = test;
   createBeanFile();
   createInterfaceService();
+  console.log("Terminado");
 }
 
 /////////////////////////////////////

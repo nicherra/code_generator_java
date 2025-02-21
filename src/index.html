@@ -64,7 +64,7 @@
           <label style="margin-left: 2em">Nombre campo</label>
           <input type="text" class="nombreCampo" placeholder="nombreApellido.." />
           <label style="margin-left: 2em" for="nullable">Nullable</label>
-          <input class="nullable" type="checkbox" value="true" />
+          <input class="nullable" type="checkbox" value="false" />
           <span class="relacionContainer" style="display: none">
             <label style="margin-left: 2em">Relacion</label>
             <input list="relacionList" class="relacion" placeholder="@OneToMany" />
@@ -128,7 +128,7 @@
 
       formulario.addEventListener("submit", function (event) {
         event.preventDefault();
-        let NombreClase = document.getElementById("nombreClase").value;
+        let NombreClase = document.getElementById("NombreClase").value;
         let atributos = [];
         let size = document.getElementsByClassName("fila").length;
         for (let i = 0; i < size; i++) {
@@ -140,7 +140,7 @@
         }
         console.log(NombreClase);
         console.log(atributos);
-        window.electronAPI.crearArchivos(NombreClase,atributos)
+        window.electronAPI.crearArchivos(NombreClase, atributos, test);
       });
 
       function nuevaFila(button) {

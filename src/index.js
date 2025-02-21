@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require("electron");
+const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("node:path");
 const { rootPath, crearArchivos } = require("./code/utils");
 
@@ -42,6 +42,11 @@ app.whenReady().then(() => {
     if (BrowserWindow.getAllWindows().length === 0) {
       createWindow();
     }
+  });
+  // Escuchar evento de creación de archivos
+  ipcMain.on("crearArchivos", (event, data) => {
+    console.log("Datos recibidos para crear archivos:", data);
+    crearArchivos(data.NombreClase, data.atributos, data.test);
   });
 });
 
