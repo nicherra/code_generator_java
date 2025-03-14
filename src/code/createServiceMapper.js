@@ -3,6 +3,7 @@ const { createDto, esClase, fromDto, get, getDto, serviceMapperPath, set, setDto
 
 function createServiceMapperFile(NombreClase, atributos) {
   const nombreClase = NombreClase.charAt(0).toLowerCase() + NombreClase.slice(1);
+  console.log("createServiceMapperFile ", nombreClase);
   const mapperServiceContent = `package ar.com.mbsoft.erp.service.impl.mapper;
 
 import ar.com.mbsoft.erp.dto.impl.generated.${NombreClase}Dto;
@@ -18,7 +19,7 @@ public class ${NombreClase}ServiceMapper extends AbstractServiceMapper{
             ${NombreClase}Dto ${nombreClase}Dto = new ${NombreClase}Dto();
             ${atributos
               .map((a) => {
-                return setDto(a.name, esClase(a.type) ? createDto(a.name) : get(a.name));
+                return setDto(a.name, esClase(a.type) ? createDto(a.name) : get(nombreClase, a.name));
               })
               .join("\n            ")}
             return ${nombreClase}Dto;
@@ -36,7 +37,7 @@ public class ${NombreClase}ServiceMapper extends AbstractServiceMapper{
             }
             ${atributos
               .map((a) => {
-                return set(a.name, esClase(a.type) ? fromDto(a.name) : getDto(a.name));
+                return set(a.name, esClase(a.type) ? fromDto(a.name) : getDto(nombreClase, a.name));
               })
               .join("\n            ")}
             return ${nombreClase};

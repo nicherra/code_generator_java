@@ -1,5 +1,6 @@
 const fs = require("fs");
 const { interfaceServicePath } = require("./utils");
+
 function createInterfaceServiceFile(NombreClase, atributos) {
   const nombreClase = NombreClase.charAt(0).toLowerCase() + NombreClase.slice(1);
   const interfaceServiceContent = `package ar.com.mbsoft.erp.service;

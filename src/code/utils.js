@@ -1,5 +1,3 @@
-const { createBeanFile } = require("./createBean");
-const { createServiceMapperFile } = require("./createServiceMapper");
 const os = require("os");
 
 const username = os.userInfo().username;
@@ -13,16 +11,19 @@ const atributos = [
   { type: "Usuario", name: "usuario", relacion: "@OneToMany" },
 ];
 */
+let atributos = [];
 
-let test = true;
+let test = false;
 const rootPath = `C:/Users/${username}/IdeaProjects/erp-web/`;
-const dtoPath = test ? "" : rootPath + "src/main/java/ar/com/mbsoft/erp/dto/impl/generated/";
-const primefacesPath = test ? "" : rootPath + "src/main/webapp/faces/" + nombreClase + "/";
-const servicePath = test ? "" : rootPath + "src/main/java/ar/com/mbsoft/erp/service/impl/";
-const serviceMapperPath = test ? "" : rootPath + "src/main/java/ar/com/mbsoft/erp/service/impl/mapper/";
-const modelPath = test ? "" : rootPath + "src/main/java/ar/com/mbsoft/erp/model/impl/";
-const interfaceServicePath = test ? "" : rootPath + "src/main/java/ar/com/mbsoft/erp/service/";
-const beanPath = test ? "" : rootPath + "src/main/java/ar/com/mbsoft/erp/bean/impl/";
+const dtoPath = test ? "test/" : rootPath + "src/main/java/ar/com/mbsoft/erp/dto/impl/generated/";
+const sqlPath = test ? "test/" : rootPath + "src/main/resources/liquibase/sql/";
+const changelogPath = test ? "test/" : rootPath + "src/main/resources/liquibase/";
+const primefacesPath = test ? "test/" : rootPath + "src/main/webapp/faces/" + nombreClase + "/";
+const servicePath = test ? "test/" : rootPath + "src/main/java/ar/com/mbsoft/erp/service/impl/";
+const serviceMapperPath = test ? "test/" : rootPath + "src/main/java/ar/com/mbsoft/erp/service/impl/mapper/";
+const modelPath = test ? "test/" : rootPath + "src/main/java/ar/com/mbsoft/erp/model/impl/";
+const interfaceServicePath = test ? "test/" : rootPath + "src/main/java/ar/com/mbsoft/erp/service/";
+const beanPath = test ? "test/" : rootPath + "src/main/java/ar/com/mbsoft/erp/bean/impl/";
 
 const mbsoft = `
 ______  _________________________________________
@@ -73,6 +74,9 @@ const tiposNumericos = [
   "short",
   "Short",
 ];
+const enteros = ["Long", "long", "Integer", "int", "byte", "Byte", "short", "Short"];
+
+const decimales = ["BigDecimal", "float", "Float", "double", "Double"];
 
 const tiposTiempo = ["Date", "LocalDate", "LocalTime", "LocalDateTime"];
 
@@ -80,19 +84,19 @@ function esClase(type) {
   return !tiposUsados.includes(type);
 }
 
-function set(name, value) {
+function set(nombreClase, name, value) {
   return nombreClase + ".set" + name.charAt(0).toUpperCase() + name.slice(1) + "(" + value + ");";
 }
 
-function get(name) {
+function get(nombreClase, name) {
   return nombreClase + ".get" + name.charAt(0).toUpperCase() + name.slice(1) + "()";
 }
 
-function setDto(name, value) {
+function setDto(nombreClase, name, value) {
   return nombreClase + "Dto.set" + name.charAt(0).toUpperCase() + name.slice(1) + "(" + value + ");";
 }
 
-function getDto(name) {
+function getDto(nombreClase, name) {
   return nombreClase + "Dto.get" + name.charAt(0).toUpperCase() + name.slice(1) + "()";
 }
 function fromDto(name) {
@@ -110,6 +114,16 @@ function nameFieldTabla(atributo) {
   if (atributo.type === "Boolean" || atributo.type === "boolean") inicial = "l";
   if (tiposTiempo.includes(atributo.type)) inicial = "t";
   return inicial + atributo.name.charAt(0).toUpperCase() + atributo.name.slice(1);
+}
+
+function getFieldTypeSQL(atributo) {
+  let type = " BIGINT ";
+  if (enteros.includes(atributo.type)) type = " BIGINT ";
+  if (decimales.includes(atributo.type)) type = " NUMERIC(16,6) ";
+  if (atributo.type === "String") type = " VARCHAR(255) ";
+  if (atributo.type === "Boolean" || atributo.type === "boolean") type = " BIT ";
+  if (tiposTiempo.includes(atributo.type)) type = " datetime2(7) ";
+  return type;
 }
 
 function getters() {
@@ -157,6 +171,7 @@ function campo(atributo) {
 }
 
 function campoTabla(atributo) {
+  console.log("Ejecutando campoTabla");
   const notNull = "    @NotNull\n";
   let anotation = "";
   if (atributo.relacion) {
@@ -170,14 +185,6 @@ function campoTabla(atributo) {
     anotation = `    @Column(name = "${nameFieldTabla(atributo)}" ${atributo.nullable ? "" : ",nullable=false"})\n    `;
   }
   return (atributo.nullable ? "" : notNull) + anotation + campo(atributo) + "\n";
-}
-
-function crearArchivos(NombreClase, atributos, test) {
-  console.log("creandoArchivos.....");
-  test = test;
-  createBeanFile();
-  createInterfaceService();
-  console.log("Terminado");
 }
 
 /////////////////////////////////////
@@ -211,5 +218,8 @@ module.exports = {
   campo,
   campoTabla,
   beanPath,
-  crearArchivos,
+  sqlPath,
+  changelogPath,
+  getFieldTypeSQL,
+  nameFieldTabla,
 };

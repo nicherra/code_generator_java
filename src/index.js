@@ -1,6 +1,7 @@
 const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("node:path");
-const { rootPath, crearArchivos } = require("./code/utils");
+const { rootPath } = require("./code/utils");
+const { crearArchivos } = require("./code/crearArchivos");
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require("electron-squirrel-startup")) {
@@ -8,45 +9,34 @@ if (require("electron-squirrel-startup")) {
 }
 
 const createWindow = () => {
-  // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 1000,
     height: 600,
     webPreferences: {
       contextIsolation: true,
-      nodeIntegration: false,
+      enableRemoteModule: true,
+      nodeIntegrationInSubFrames: true,
+      nodeIntegrationInWorker: true,
+      nodeIntegration: true,
       preload: path.join(__dirname, "preload.js"),
     },
   });
   mainWindow.webContents.on("did-finish-load", () => {
     mainWindow.webContents.send("set-root-path", rootPath);
-    mainWindow.webContents.send("crearArchivos", crearArchivos);
   });
-
-  // and load the index.html of the app.
   mainWindow.loadFile(path.join(__dirname, "index.html"));
-
-  // Open the DevTools.
-  //mainWindow.webContents.openDevTools();
 };
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
   createWindow();
-
-  // On OS X it's common to re-create a window in the app when the
-  // dock icon is clicked and there are no other windows open.
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) {
       createWindow();
     }
   });
-  // Escuchar evento de creación de archivos
   ipcMain.on("crearArchivos", (event, data) => {
     console.log("Datos recibidos para crear archivos:", data);
-    crearArchivos(data.NombreClase, data.atributos, data.test);
+    crearArchivos(data);
   });
 });
 

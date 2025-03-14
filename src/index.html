@@ -22,7 +22,7 @@
     <section>
       <div>
         <label for="type">Test</label>
-        <input type="checkbox" value="true" />
+        <input type="checkbox" id="test" value="true" />
       </div>
       <label for="type">Ruta Projecto raiz</label>
       <input id="rootPath" style="width: 100%" />
@@ -129,6 +129,7 @@
       formulario.addEventListener("submit", function (event) {
         event.preventDefault();
         let NombreClase = document.getElementById("NombreClase").value;
+        let test = document.getElementById("test").value;
         let atributos = [];
         let size = document.getElementsByClassName("fila").length;
         for (let i = 0; i < size; i++) {
@@ -140,7 +141,7 @@
         }
         console.log(NombreClase);
         console.log(atributos);
-        window.electronAPI.crearArchivos(NombreClase, atributos, test);
+        window.electronAPI.crearArchivos({ NombreClase, atributos, test });
       });
 
       function nuevaFila(button) {

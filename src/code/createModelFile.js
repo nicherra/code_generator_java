@@ -1,6 +1,10 @@
 const fs = require("fs");
-const { campoTabla, getters, modelPath, setters } = require("./utils");
+
+const { campoTabla, getters, modelPath, setters } = require("./utils.js");
+
+console.log("campoTabla", campoTabla);
 function createModelFile(NombreClase, atributos) {
+  console.log("createModelFile");
   const nombreClase = NombreClase.charAt(0).toLowerCase() + NombreClase.slice(1);
   const modelContent = `package ar.com.mbsoft.erp.model.impl;
 
